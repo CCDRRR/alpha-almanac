@@ -7,13 +7,13 @@
 
 ## 💡 為什麼做這個
 
-剛當顧問的時候，我最常卡住的不是寫 Alpha，而是**找資料**：
+WQB 的資料很多，但我一直覺得**很難找**：
 
-- **資料散在好多地方**：名詞定義在詞彙表、規則在 Help Center、做法在平台文件和影片、台灣挑戰在論壇、Theme 和 Power Pool 在平台公告。像「Pyramid 乘數怎麼算」「PPA 的提交條件」，常常要開四五個分頁才拼得出答案。
-- **每次都要登入才看得到**：大部分資料都在登入後，臨時想查一個規則，得先登入、掃臉，再一頁一頁翻。
-- **活動太多記不住**：雙週挑戰、季賽、Power Pool Theme、官方比賽，各有各的期間和計分方式，很容易錯過。
+- **資料分散在很多地方**：名詞定義在詞彙表、規則在 Help Center、做法在平台文件和影片、台灣挑戰在論壇、Theme 和 Power Pool 在平台公告。像「Pyramid 乘數怎麼算」「PPA 的提交條件」，常常要開好幾個分頁才拼得出答案。
+- **每次都要登入才看得到**：臨時想查一個規則，得先登入、掃臉，再一頁一頁翻。
+- **活動很多記不住**：雙週挑戰、季賽、Power Pool Theme、官方比賽，各有各的期間和計分方式。
 
-所以我做了一個 agent 幫我做知識管理：**登入一次，把重要的知識、活動、比賽爬回本機，整理好；之後有需要就直接問它。**
+所以我設計了一個 agent 幫我做知識管理：**把重要的活動、比賽、知識爬下來，有需要知道什麼，我直接問它就行。**
 
 ---
 
@@ -46,7 +46,7 @@
 - 五種檢視：**全部 / 比賽 / Power Pool / 活動 / 自訂**；可搜尋（例如「GLB」「USD」）。
 - 「**今天進行中**」清單，顯示還剩幾天。
 - 「**Power Pool 現況**」：進行中的 PP Theme 條件 + PPA 通用資格與提交額度（每次更新都從官方文件重新抽取）。
-- 三種主題（黑 / 白 / 藍），顏色可自訂。
+- 四種主題：黑 / 白 / 藍 / **農民曆**（米黃紙、朱紅墨黑、明體字，今日宜忌做成撕頁日曆並附農曆日期），顏色可自訂。
 - 跟 agent 說「**打開月曆，只看 Power Pool**」，它會直接在瀏覽器打開對應的檢視。
 
 ### 🧧 今日宜忌
@@ -114,9 +114,7 @@ notepad .env
 
 **5.** 在系統匣的 Claude 圖示按右鍵 →「Quit」，再重新打開 Claude Desktop，就能開始問了。
 
-<details><summary>想手動設定 Claude Desktop 的話</summary>
-
-在設定檔的 `mcpServers` 加入下面這段（路徑換成你的資料夾；檔案裡原有的設定要保留）。
+**（進階）手動設定 Claude Desktop**：用上面第 4 步就不需要。想自己改的話，在設定檔的 `mcpServers` 加入下面這段（路徑換成你的資料夾；檔案裡原有的設定要保留）。
 設定檔位置：新版（設定裡沒有 Developer 選單）在 `%LOCALAPPDATA%\Claude-Data\claude_*\claude_desktop_config.json`；舊版是「設定 → Developer → Edit Config」。
 
 ```json
@@ -134,7 +132,6 @@ notepad .env
   }
 }
 ```
-</details>
 
 ### 每次執行的成本
 
@@ -218,7 +215,93 @@ notepad .env
 
 ## 5. 實際執行範例
 
-〔待補：Claude Desktop 實測紀錄，預計放「PPA 是什麼？提交條件有哪些？」與「現在有哪些 Power Pool Theme？規則是什麼？」兩題的完整輸入、工具呼叫與輸出。〕
+以下是在 **Claude Desktop（Windows）** 的真實紀錄，2026-11-12 執行，回答原文照貼、未修改。
+
+### 範例 1：名詞＋規則（看它怎麼處理新舊規則衝突）
+
+**輸入**
+
+> PPA 是什麼？提交條件有哪些？
+
+**輸出**
+
+#### PPA 是什麼
+
+**PPA = Power Pool Alpha**。官方的說法是：結構精簡、品質高的 Alpha，用在 Genius、比賽和 Theme 挑戰，**只開放顧問（consultant）提交**。
+出處：[Glossary](https://support.worldquantbrain.com/hc/en-us/articles/4902349883927-Click-here-for-a-list-of-terms-and-their-definitions)
+
+#### 提交條件（官方文件，2026-09-22 更新）
+
+1. **Sharpe ≥ 1.0**
+2. **Operator 總數 ≤ 8**：重複使用的也要算，但 `ts_backfill` 和 `group_backfill` 不算
+3. **不重複的 data field ≤ 3**：分組欄位不算，包括 country、industry、subindustry、currency、market、sector、exchange
+4. **Power Pool Correlation < 0.5**：如果 > 0.5，Sharpe 要比相關性最高的那支 Alpha 高至少 10%，才能提交
+5. **Turnover test PASS**
+6. **Sub-universe test PASS**
+7. **Robust-universe test PASS**（有這項測試時才需要）
+8. **Region、Delay、Universe 和其他條件**（risk neutralization、資料集、turnover 範圍等）以**進行中的 Power Pool Theme** 為準
+
+另外，Alpha 的 description 寫得準不準、品質好不好，也會影響它能不能進 Power Pool。
+出處：[Power Pool Alphas](https://platform.worldquantbrain.com/learn/documentation/consultant-information/getting-started-power-pool-alphas)、[Update - Power Pool Submission Criteria（2025-05-09 公告）](https://platform.worldquantbrain.com/messages/announcements)
+
+**分類：** 只符合 PPA 條件的叫 **pure PPA**。如果同時符合 Regular 或 ATOM 的條件，就分成 [Power Pool + Regular] 或 [Power Pool + ATOM]。
+
+#### 提交額度（從第一次交 PPA 起算）
+
+| 經過時間 | pure PPA 每日上限 | 每月上限 |
+|---|---|---|
+| 第 1–2 週 | 4 支 | 無 |
+| 第 3–4 週 | 2 支 | 無 |
+| 第 5–6 週 | 1 支 | 無 |
+| 6 週後 | 1 支（**必須符合進行中的 Theme**） | 每個 scope 每月 10 支 |
+
+- 6 週後如果交的 pure PPA 不符合任何 Theme，會被退回，訊息是 "Pure Power Pool submission does not match any Power Pool Theme"。
+- [PP + ATOM] 和 [PP + Regular] 這兩類**不算進上面的額度**。
+
+出處：[Which Alphas are eligible for Power Pool Alphas Thematic Competition?](https://support.worldquantbrain.com/hc/en-us/articles/37443810800535-Which-Alphas-are-eligible-for-Power-Pool-Alphas-Thematic-Competition)
+
+#### 目前進行中的 Theme
+
+**GLB/D1 Power Pool Nov\`26**
+- 期間：10/26 ～ **11/23（一）12:59 台灣時間**（= 11/22 23:59 ET）
+- 條件：GLB region、Delay 1、AMER Sharpe > 1
+- 推薦資料集：pv1、model110、model77 等
+
+出處：[平台公告](https://platform.worldquantbrain.com/messages/announcements)
+
+#### 注意：有幾份舊資料和現行規則不一樣
+- **Glossary** 寫的是「首次提交 **3 個月**後每月 10 支」；**2026-09-22 的官方文件**改成「**6 週**後」。以新的為準。
+- **2025 年 PPAC 的比賽規則**寫的是「unique operator ≤ 8、Turnover 1%–70%、只限 USA D1」。這是舊版：現在算的是 operator 總數（包含重複的），region 和 turnover 範圍則由進行中的 Theme 決定。
+
+👉 **這個範例展示了**：每段都附官方出處；額度表與資格條件和官方文件一致；**主動找出兩處新舊規則衝突**並說明以哪個為準；最後還順手帶出目前可以交的 Power Pool Theme，時間用台灣時間並附美東時間。
+
+### 範例 2：今日宜忌
+
+**輸入**
+
+> 今天宜忌？
+
+**輸出**
+
+#### 🗓️ Alpha 農民曆：2026-11-12（四）
+
+**✅ 宜**
+- **交 PPA**：GLB/D1 Power Pool Nov\`26（GLB region、Delay 1、AMER Sharpe > 1）。還有 10 天，截止時間是 **11/23（一）12:59 台灣時間**（= 11/22 23:59 ET）。
+- **衝刺 Alpha Quality Project November 2026**，還有 18 天。
+- **吃 Theme 乘數**：USA/D1 TOP1000，乘數 **2X–3X**，還有 24 天。
+- **衝刺 2026 Q4 台灣挑戰賽（USA / GLB Alpha 挑戰）**，還有 24 天。
+- **衝刺 2026 Q4 Agent Creation Mini Challenge**，還有 35 天。
+
+**❌ 忌**
+- **再交 Bi-Weekly Alpha Challenge #2**：已在 11/10 12:59 台灣時間截止。
+- **PPA 用超過 3 個 data field**：分組欄位不算在內。
+
+**💡 今日建議**
+GLB/D1 Power Pool 的期限最近，先處理它。USA/D1 TOP1000 的 Theme 和台灣挑戰賽都能拿 USA 的 Alpha 來交，所以可以一起準備。
+
+這份宜忌是依知識庫的月曆即時算出來的，剩餘天數以台灣時間計，正式截止以美東時間（ET）為準。除了 Power Pool 這項，其他活動的確切截止時間要再查月曆。來源：[平台公告](https://platform.worldquantbrain.com/messages/announcements)。
+
+👉 **這個範例展示了**：一句話就整理出今天能做什麼（交哪個 Theme、衝哪個比賽）、不能做什麼（哪個已經截止），每項都附剩餘天數，最後還根據截止順序給出建議。
 
 ---
 
@@ -271,7 +354,7 @@ notepad .env
   - 所以在台灣時間檢視下，月曆上的結束日常會比官方公告**多一天**，這是正常的。
   - 公告只寫日期、沒寫時間的項目（大部分 Theme 與論壇公告），視為美東當天 00:00 開始、23:59 結束。
   - 問 agent 時，它也會先給台灣時間，括號附上美東時間。
-- **外觀**：右上角切換黑 / 白 / 藍，齒輪可改各類別顏色；設定會記在你的瀏覽器。
+- **外觀**：右上角切換黑 / 白 / 藍 / 農民曆，齒輪可改各類別顏色；設定會記在你的瀏覽器。
 
 ### 常見問題
 

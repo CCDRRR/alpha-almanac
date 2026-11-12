@@ -92,7 +92,7 @@ def open_calendar(view: str | None = None, q: str | None = None, month: str | No
                   theme: str | None = None, tz: str | None = None) -> dict:
     """在使用者電腦上用瀏覽器打開「活動月曆」頁面（會先用本地資料重建）。預設顯示台灣時間。
     view：all 全部 / comp 比賽 / pp Power Pool / events 活動（非比賽）/ custom 自訂。
-    q：預先填入搜尋（例 GLB、USD）；month：跳到某月（YYYY-MM）；theme：dark / light / blue；
+    q：預先填入搜尋（例 GLB、USD）；month：跳到某月（YYYY-MM）；theme：dark / light / blue / almanac（農民曆）；
     tz：tw 台灣時間 / et 美東時間（官方以美東為準）。
     使用者說「打開月曆」「給我看月曆」時用這個；只要文字答案時用 get_calendar。"""
     from .calendar import open_page

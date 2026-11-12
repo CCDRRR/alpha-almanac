@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alpha 農民曆</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/locales/zh-tw.global.min.js"></script>
 <style>
@@ -26,6 +28,27 @@
     --g-official: #6db3ff; --g-tw: #ffc46b; --g-theme: #b79cff; --g-event: #5fe0b5; --g-agent: #ff98bd;
     --g-pp: #66d9e8; --mix: 24%;
   }
+  /* 農民曆：米黃紙、朱紅、墨黑、明體 */
+  :root[data-theme="almanac"] {
+    --bg: #efe2c4; --panel: #fffaf0; --text: #2b1d14; --muted: #7a5c45; --line: #dcc59c;
+    --soft: #f6ead2; --accent: #b3261e; --today: #fbe0d4; --shadow: 0 1px 0 #d8c094;
+    --g-official: #34568b; --g-tw: #b3261e; --g-theme: #a87a12; --g-event: #6b4a2e; --g-agent: #8e3b8a;
+    --g-pp: #2e7d6b; --mix: 16%;
+    --serif: "Noto Serif TC", "PMingLiU", "MingLiU", "Songti TC", "Source Han Serif TC", serif;
+  }
+  :root[data-theme="almanac"] body { font-family: var(--serif); }
+  :root[data-theme="almanac"] header h1 { color: var(--accent); letter-spacing: 2px; }
+  :root[data-theme="almanac"] header { border-bottom: 3px double var(--accent); margin: 0 24px 12px; padding-left: 0; padding-right: 0; }
+  :root[data-theme="almanac"] .card { box-shadow: inset 0 0 0 3px var(--panel), inset 0 0 0 4px var(--line); }
+  :root[data-theme="almanac"] .fc .fc-toolbar-title { color: var(--accent); letter-spacing: 1px; }
+  :root[data-theme="almanac"] .alm { padding: 0; overflow: hidden; border-color: var(--accent); }
+  :root[data-theme="almanac"] .alm h2 { background: var(--accent); color: #fffaf0; margin: 0; padding: 8px 14px;
+                                         letter-spacing: 4px; font-size: 14px; }
+  :root[data-theme="almanac"] .alm .alm-body { padding: 10px 14px 12px; }
+  :root[data-theme="almanac"] .alm-day { color: var(--accent); }
+  :root[data-theme="almanac"] .alm-badge { border-radius: 50%; font-family: var(--serif); }
+  :root[data-theme="almanac"] .alm-badge.yi { color: #fffaf0; background: var(--accent); }
+  :root[data-theme="almanac"] .alm-badge.ji { color: #fffaf0; background: var(--text); }
   * { box-sizing: border-box; }
   html, body { background: var(--bg); }
   body { margin: 0; color: var(--text);
@@ -57,6 +80,11 @@
   .search input:focus { border-color: var(--accent); }
   .quick { border: 0; background: none; color: var(--accent); cursor: pointer; font-size: 13px; padding: 0 2px; }
 
+  .alm-date { display: flex; align-items: center; gap: 12px; padding-bottom: 8px; margin-bottom: 6px;
+              border-bottom: 1px dashed var(--line); }
+  .alm-day { font-size: 40px; font-weight: 700; line-height: 1; min-width: 52px; text-align: center; }
+  .alm-meta { font-size: 13px; line-height: 1.5; }
+  .alm-lunar { color: var(--muted); font-size: 12px; }
   .alm-row { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; font-size: 13px; }
   .alm-row.click { cursor: pointer; }
   .alm-row.click:hover .alm-t { color: var(--accent); }
@@ -158,7 +186,7 @@
     <button data-z="tw">台灣時間</button><button data-z="et">美東時間</button>
   </div>
   <div class="seg" role="group" aria-label="主題">
-    <button data-t="dark">黑</button><button data-t="light">白</button><button data-t="blue">藍</button>
+    <button data-t="dark">黑</button><button data-t="light">白</button><button data-t="blue">藍</button><button data-t="almanac">農民曆</button>
   </div>
   <button class="icon-btn" id="gear" title="自訂顏色" aria-label="自訂顏色">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -181,7 +209,8 @@
 <main>
   <div class="card"><div id="calendar"></div></div>
   <aside>
-    <div class="card alm"><h2 id="alm-date">今日宜忌</h2><div id="alm"></div></div>
+    <div class="card alm"><h2>今日宜忌</h2>
+      <div class="alm-body"><div class="alm-date" id="alm-date"></div><div id="alm"></div></div></div>
     <div class="card"><h2>今天進行中</h2><div id="now"></div></div>
     <div class="card"><h2>Power Pool 現況</h2><div id="pp"></div></div>
     <div class="card" id="detail"><p class="empty">點選月曆上的項目，查看名稱、目的、計分方式與獎項。</p></div>
@@ -346,10 +375,26 @@ function almanac() {
   }
   return { yi, ji };
 }
+// 農曆日期（瀏覽器內建 chinese 曆法）：「丙午年（馬）十月初四」
+const ZODIAC = { 子: "鼠", 丑: "牛", 寅: "虎", 卯: "兔", 辰: "龍", 巳: "蛇", 午: "馬", 未: "羊", 申: "猴", 酉: "雞", 戌: "狗", 亥: "豬" };
+const lunarDay = n => n === 10 ? "初十" : n === 20 ? "二十" : n === 30 ? "三十"
+  : (["初", "十", "廿"][Math.floor(n / 10)] || "") + "一二三四五六七八九"[(n % 10) - 1];
+function lunarText(d, tzId) {
+  try {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("zh-TW-u-ca-chinese", { timeZone: tzId, year: "numeric",
+      month: "long", day: "numeric" }).formatToParts(d).map(x => [x.type, x.value]));
+    const z = p.yearName ? ZODIAC[p.yearName.slice(-1)] : "";
+    return `農曆 ${p.yearName || ""}年${z ? `（${z}）` : ""} ${p.month}${lunarDay(parseInt(p.day, 10))}`;
+  } catch (e) { return ""; }   // 不支援農曆的瀏覽器就不顯示
+}
 function renderAlmanac() {
   const { yi, ji } = almanac();
-  document.getElementById("alm-date").textContent =
-    `今日宜忌 · ${new Intl.DateTimeFormat("zh-TW", { timeZone: ZONES[prefs.tz].id, month: "numeric", day: "numeric", weekday: "short" }).format(new Date())}`;
+  const d = new Date(), tzId = ZONES[prefs.tz].id;
+  const part = o => new Intl.DateTimeFormat("zh-TW", { timeZone: tzId, ...o }).format(d);
+  document.getElementById("alm-date").innerHTML = `
+    <div class="alm-day">${esc(part({ day: "numeric" }).replace("日", ""))}</div>
+    <div class="alm-meta"><div>${esc(part({ year: "numeric", month: "long" }))} · ${esc(part({ weekday: "long" }))}</div>
+      <div class="alm-lunar">${esc(lunarText(d, tzId))}</div></div>`;
   const row = (kind, x) => `<div class="alm-row${x.i ? " click" : ""}" ${x.i ? `data-id="${esc(x.i.id)}"` : ""}>
       <span class="alm-badge ${kind === "宜" ? "yi" : "ji"}">${kind}</span>
       <div><div class="alm-t">${esc(x.t)}</div>${x.d ? `<div class="alm-d">${esc(x.d)}</div>` : ""}</div></div>`;
@@ -460,7 +505,7 @@ document.querySelectorAll("button[data-z]").forEach(b => b.onclick = () => setTz
 
 // ---------- 網址參數（agent 的 open_calendar 會帶）：#view=pp&q=GLB&date=2026-11-01 ----------
 const H = new URLSearchParams(location.hash.slice(1));
-if (H.get("theme") && ["dark", "light", "blue"].includes(H.get("theme"))) prefs.theme = H.get("theme");
+if (H.get("theme") && ["dark", "light", "blue", "almanac"].includes(H.get("theme"))) prefs.theme = H.get("theme");
 if (H.get("q")) { qInput.value = H.get("q"); query = H.get("q").trim().toLowerCase(); }
 if (ZONES[H.get("tz")]) prefs.tz = H.get("tz");
 
