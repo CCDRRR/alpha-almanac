@@ -1,0 +1,153 @@
+en,zh,aliases,kind
+Alpha,,alpha因子;因子;alphas,core
+SuperAlpha,,super alpha;superalpha;SA,core
+Regular Alpha,,regular alpha;一般alpha;RA,core
+Python Alpha,,python alpha,core
+ATOM,,atom alpha;單一資料集alpha,core
+Power Pool Alphas,,power pool;powerpool;PP;PPA;pure power pool,core
+Theme,主題,themes,core
+Theme multiplier,主題乘數,theme乘數,core
+Pyramid,金字塔,pyramids,core
+Pyramid multiplier,金字塔乘數,pyramid乘數;pyramid multipliers;dynamic pyramid multiplier,core
+Genius,,genius program;genius等級,core
+Osmosis,,osmosis allocation,core
+Consultant,顧問,研究顧問;consultants,core
+Simulation,模擬,simulate;回測模擬;跑模擬,core
+Submission,提交,submit;上傳alpha;交alpha,core
+Submission test,提交測試,submission check;提交檢查;提交條件,core
+Fast Expression,快速表達式,fast expr;FE,core
+Combination expression,組合表達式,combo expression,core
+Selection expression,選擇表達式,selection expr,core
+Super selection,,super-selection,core
+Operator,運算子,算子;函數;operators,core
+Data field,資料欄位,datafield;data fields;欄位;字段,data
+Matrix Data field,矩陣欄位,matrix field;matrix,data
+Vector Data field,向量欄位,vector field;vector,data
+Dataset,資料集,data set;datasets;數據集,data
+Dataset Value Score,資料集價值分數,value score;價值分數,data
+Coverage,覆蓋率,coverage ratio;資料覆蓋率,data
+Backfill,回補,向前填補;ffill,data
+NaN,缺值,nan;空值;缺失值,data
+Region,地區,區域;regions,setting
+Universe,股票池,universe;股池;成分股,setting
+Delay,延遲,delay 0;delay 1;D0;D1,setting
+Decay,衰減,decay,setting
+Truncation,截斷,truncation;權重上限,setting
+Neutralization,中性化,neutralize;neutralise;中和,setting
+Pasteurization,,pasteurize,setting
+Booksize,本金規模,book size;帳本規模,setting
+Test Period,測試期間,test period,setting
+Instrument,金融商品,instrument type;商品類型,setting
+Sharpe ratio,夏普比率,sharpe;夏普值;夏普,metric
+Fitness,適應度,fitness;fitness值,metric
+Turnover,換手率,週轉率;turnover,metric
+Returns,報酬率,return;收益率;報酬,metric
+Drawdown,回撤,最大回撤;max drawdown;DD,metric
+Margin,利潤率,margin;每筆交易利潤,metric
+Profit and Loss,損益,PnL;pnl;盈虧,metric
+Information ratio,資訊比率,IR;information ratio,metric
+Correlation,相關性,相關係數;corr,metric
+Self correlation,自相關,self-correlation;self corr;自我相關;自相關性,metric
+Prod correlation,生產相關性,prod-correlation;prod corr;正式環境相關性,metric
+Capacity,容量,策略容量,metric
+Robustness,穩健性,robust;魯棒性,metric
+Overfitting,過擬合,overfit;過度擬合,metric
+Kurtosis,峰度,kurtosis,metric
+Skewness,偏度,skew,metric
+Standard Deviation,標準差,std;stddev,metric
+Z-Score,標準分數,zscore;z分數,metric
+Ts-Zscore,,ts_zscore,metric
+Rank,排名,rank;排序,metric
+Median,中位數,median,metric
+Winsorize,縮尾,winsorization;縮尾處理,metric
+Regression,迴歸,regression;回歸,metric
+In-sample,樣本內,IS;in sample,period
+Out-of-sample,樣本外,OS;OOS;out of sample,period
+Semi Out-of-sample,半樣本外,semi-OS;semi OS,period
+IS Ladder,,is ladder;IS ladder sharpe;ladder,period
+Sub-universe test,,sub universe test;sub-universe,period
+Super-universe test,,super universe test,period
+Backtesting,回測,backtest,period
+Weight,權重,weights;部位權重,portfolio
+Net weight,淨權重,net exposure,portfolio
+Long-short neutral,多空中性,dollar neutral;多空平衡,portfolio
+Max Trade,最大交易,max trade,portfolio
+Liquidity,流動性,liquid,portfolio
+Illiquid Universe,低流動性股票池,illiquid,portfolio
+Investability,可投資性,investable,portfolio
+Signal,訊號,signals;信號,research
+Strategy,策略,strategies,research
+Statistical arbitrage,統計套利,stat arb,research
+Mean-reversion,均值回歸,mean reversion;均值回復;反轉,research
+Reversion,反轉,reversal;回歸,research
+Momentum,動能,動量;momentum,research
+Value Factor,價值因子,value,research
+Risk Factors,風險因子,risk factor,research
+Risk-neutralized Alpha,風險中性化阿爾法,risk neutralized;風險中性,research
+Technical analysis,技術分析,technical,research
+Fundamental analysis,基本面分析,fundamental,research
+Financial ratio,財務比率,financial ratios,research
+Market capitalization,市值,market cap;cap;capitalization,research
+Outstanding shares,流通股數,shares outstanding,research
+Dividend,股利,股息;配息,research
+Stock split ratio,股票分割比率,stock split;分割,research
+Volume,成交量,volume,research
+VWAP,成交量加權平均價,vwap,research
+Relative Strength Index,相對強弱指標,RSI,research
+Bollinger Band,布林通道,bollinger,research
+Simple moving average,簡單移動平均,SMA;移動平均;均線,research
+Stochastic oscillator,隨機指標,KD;stochastic,research
+Sector,產業類別,sector;板塊,research
+Industry,產業,industry;行業,research
+Subindustry,子產業,sub-industry;subindustry;子行業,research
+Group,群組,group;分組,research
+Grouping Field,分組欄位,grouping field,research
+Base payment,基本報酬,base pay;日薪;每日報酬,payment
+Quarterly payment,季度報酬,quarterly pay;季獎金;季度獎金,payment
+Periodic payment,定期報酬,periodic pay,payment
+Leaderboard,排行榜,leaderboard;排名榜,payment
+Background check,背景調查,background check,payment
+Workday,,workday,payment
+Arithmetic,算術運算子,arithmetic operators,operator_category
+Cross Sectional,截面運算子,cross sectional;cross-sectional;橫截面,operator_category
+Logical,邏輯運算子,logical operators,operator_category
+Time Series,時間序列運算子,time series;ts運算子;時序,operator_category
+Transformational,轉換運算子,transformational,operator_category
+Analyst,分析師,analyst data;分析師預估,data_category
+Broker,券商,broker data,data_category
+Earnings,財報,earnings;盈餘;財報資料,data_category
+Fundamental,基本面,fundamental data;基本面資料,data_category
+Imbalance,買賣失衡,imbalance,data_category
+Insiders,內部人,insider;內部人交易,data_category
+Institutions,機構投資人,institution;法人,data_category
+Macro,總經,macro;總體經濟,data_category
+Model,模型,model data,data_category
+News,新聞,news data;新聞資料,data_category
+Option,選擇權,options;期權,data_category
+Price Volume,價量,price volume;價量資料,data_category
+Risk,風險,risk data,data_category
+Sentiment,情緒,sentiment;市場情緒,data_category
+Short Interest,空單,short interest;融券;放空,data_category
+Social Media,社群媒體,social media,data_category
+USA,美國,US;美股,region
+GLB,全球,global,region
+EUR,歐洲,europe,region
+ASI,亞洲,asia,region
+CHN,中國,china;陸股;A股,region
+IND,印度,india,region
+KOR,韓國,korea,region
+HKG,香港,hong kong;港股,region
+DEU,德國,germany,region
+GBR,英國,uk;britain,region
+AMR,美洲,americas,region
+International Quant Championship,國際量化錦標賽,IQC,competition
+Super Alpha Competition,,SAC,competition
+Systematic Prediction Challenge,,SPC,competition
+Data Creation Challenge,,DCC,competition
+Alpha Quality Project,,AQP,competition
+AI Alphas Competition,,AIAC,competition
+All Region Competition,,ARC;全區域競賽,competition
+Bi-weekly Alpha Challenge,雙週挑戰,bi-weekly;biweekly;雙週賽,competition
+Local Consultant Challenge,台灣在地挑戰,local challenge;在地挑戰;台灣挑戰賽,competition
+Office Hour,,office hours;顧問答疑,competition
+Power Pool Alpha Competition,,PPAC;power pool competition,competition

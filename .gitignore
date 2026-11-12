@@ -1,0 +1,8 @@
+.env
+data/
+__pycache__/
+*.pyc
+.venv/
+
+# 個人工作筆記（含個人資訊、本機路徑），不公開
+CLAUDE.md

@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alpha 農民曆</title>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/locales/zh-tw.global.min.js"></script>
+<style>
+  /* ---------- 主題：白 / 黑 / 藍 ---------- */
+  :root, :root[data-theme="light"] {
+    --bg: #f5f6f8; --panel: #ffffff; --text: #1d2330; --muted: #6b7280; --line: #e6e8ec;
+    --soft: #f0f2f5; --accent: #3b5bdb; --today: #eef2ff; --shadow: 0 1px 2px rgba(16,24,40,.06);
+    --g-official: #4c6ef5; --g-tw: #e8890c; --g-theme: #7950f2; --g-event: #2f9e44; --g-agent: #d6336c;
+    --g-pp: #0c8599; --mix: 14%;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1013; --panel: #16191e; --text: #e8eaee; --muted: #8b93a1; --line: #252a31;
+    --soft: #1d2127; --accent: #8ea2ff; --today: #1b2030; --shadow: none;
+    --g-official: #7c93ff; --g-tw: #ffb35c; --g-theme: #a98bff; --g-event: #5fcf80; --g-agent: #ff7fa8;
+    --g-pp: #3bc9db; --mix: 22%;
+  }
+  :root[data-theme="blue"] {
+    --bg: #0a1830; --panel: #0f2342; --text: #e6eefb; --muted: #93a9cc; --line: #1c375e;
+    --soft: #142c52; --accent: #6db3ff; --today: #16345f; --shadow: none;
+    --g-official: #6db3ff; --g-tw: #ffc46b; --g-theme: #b79cff; --g-event: #5fe0b5; --g-agent: #ff98bd;
+    --g-pp: #66d9e8; --mix: 24%;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body { margin: 0; color: var(--text);
+         font: 14px/1.55 system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+         transition: background .2s, color .2s; }
+  button { font: inherit; color: inherit; }
+
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 18px 24px 10px; }
+  header h1 { margin: 0; font-size: 19px; font-weight: 650; letter-spacing: .2px; }
+  header .meta { color: var(--muted); font-size: 12px; }
+  .spacer { flex: 1; }
+  .seg { display: inline-flex; background: var(--soft); border: 1px solid var(--line); border-radius: 8px; padding: 2px; }
+  .seg button { border: 0; background: transparent; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--muted); }
+  .seg button[aria-pressed="true"] { background: var(--panel); color: var(--text); box-shadow: var(--shadow); }
+  .icon-btn { border: 1px solid var(--line); background: var(--soft); border-radius: 8px; width: 32px; height: 30px;
+              cursor: pointer; display: inline-grid; place-items: center; color: var(--muted); }
+  .icon-btn:hover { color: var(--text); }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 24px 14px; }
+  .filter { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: transparent;
+            border-radius: 999px; padding: 3px 11px 3px 9px; cursor: pointer; font-size: 13px; color: var(--text); }
+  .filter .n { color: var(--muted); font-size: 12px; }
+  .filter[aria-pressed="false"] { color: var(--muted); }
+  .filter[aria-pressed="false"] .dot { background: transparent !important; box-shadow: inset 0 0 0 1.5px var(--c); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: none; }
+  .search { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .search input { border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 8px;
+                  padding: 4px 10px; font: inherit; font-size: 13px; width: 220px; outline: none; }
+  .search input:focus { border-color: var(--accent); }
+  .quick { border: 0; background: none; color: var(--accent); cursor: pointer; font-size: 13px; padding: 0 2px; }
+
+  .alm-row { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; font-size: 13px; }
+  .alm-row.click { cursor: pointer; }
+  .alm-row.click:hover .alm-t { color: var(--accent); }
+  .alm-badge { flex: none; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+               font-weight: 700; font-size: 13px; }
+  .alm-badge.yi { color: var(--g-event); background: color-mix(in srgb, var(--g-event) var(--mix), var(--panel)); }
+  .alm-badge.ji { color: var(--g-agent); background: color-mix(in srgb, var(--g-agent) var(--mix), var(--panel)); }
+  .alm-t { font-weight: 600; }
+  .alm-d { color: var(--muted); font-size: 12px; }
+  .pp-item { padding: 8px 0; border-top: 1px solid var(--line); cursor: pointer; }
+  .pp-item:first-of-type { border-top: 0; padding-top: 2px; }
+  .pp-item .t { font-weight: 600; font-size: 13px; }
+  .pp-item .d { color: var(--muted); font-size: 12px; }
+  .pp-item ul { margin: 4px 0 0; padding-left: 18px; font-size: 12.5px; }
+  .pp-item:hover .t { color: var(--accent); }
+  details { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; font-size: 12.5px; }
+  details summary { cursor: pointer; font-weight: 600; color: var(--text); }
+  details ul { margin: 6px 0; padding-left: 18px; }
+  details table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 12px; }
+  details th, details td { border: 1px solid var(--line); padding: 3px 5px; text-align: left; vertical-align: top; }
+  details th { background: var(--soft); font-weight: 600; }
+  details .muted { color: var(--muted); }
+  details a { color: var(--accent); }
+
+  main { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; padding: 0 24px 28px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; box-shadow: var(--shadow); }
+  aside { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  aside h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .now-item { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); cursor: pointer; }
+  .now-item:first-of-type { border-top: 0; padding-top: 2px; }
+  .now-item .bar { width: 3px; border-radius: 2px; background: var(--c); flex: none; }
+  .now-item .t { font-weight: 600; font-size: 13px; }
+  .now-item .d { color: var(--muted); font-size: 12px; }
+  .now-item:hover .t { color: var(--accent); }
+
+  #detail h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.4; }
+  #detail .dates { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  #detail .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  #detail .tag { background: var(--soft); border: 1px solid var(--line); border-radius: 5px; padding: 0 7px; font-size: 12px; color: var(--muted); }
+  #detail dt { font-weight: 600; margin-top: 12px; font-size: 13px; }
+  #detail dd { margin: 3px 0 0; white-space: pre-wrap; word-break: break-word; font-size: 13px; }
+  #detail a { color: var(--accent); }
+  #detail .src { color: var(--muted); font-size: 12px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .empty { color: var(--muted); margin: 0; }
+
+  /* ---------- 自訂面板 ---------- */
+  #settings { position: fixed; top: 64px; right: 24px; width: 280px; z-index: 20; display: none; }
+  #settings.open { display: block; }
+  #settings h2 { margin: 0 0 10px; font-size: 14px; color: var(--text); }
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+  .row input[type=color] { width: 34px; height: 24px; border: 1px solid var(--line); border-radius: 6px; padding: 0; background: none; cursor: pointer; }
+  .actions { display: flex; justify-content: space-between; margin-top: 10px; }
+  .btn { border: 1px solid var(--line); background: var(--soft); border-radius: 8px; padding: 4px 12px; cursor: pointer; font-size: 13px; }
+
+  /* ---------- FullCalendar 外觀 ---------- */
+  .fc { --fc-border-color: var(--line); --fc-page-bg-color: var(--panel); --fc-neutral-bg-color: var(--soft);
+        --fc-today-bg-color: var(--today); --fc-list-event-hover-bg-color: var(--soft);
+        --fc-button-bg-color: var(--soft); --fc-button-border-color: var(--line); --fc-button-text-color: var(--text);
+        --fc-button-hover-bg-color: var(--line); --fc-button-hover-border-color: var(--line);
+        --fc-button-active-bg-color: var(--panel); --fc-button-active-border-color: var(--line); }
+  .fc .fc-toolbar-title { font-size: 17px; font-weight: 650; }
+  .fc .fc-button { font-size: 13px; padding: 4px 10px; box-shadow: none !important; }
+  .fc .fc-button-active { color: var(--accent) !important; }
+  .fc .fc-col-header-cell-cushion, .fc .fc-daygrid-day-number { color: var(--muted); text-decoration: none; font-size: 12px; }
+  .fc .fc-day-today .fc-daygrid-day-number { color: var(--accent); font-weight: 700; }
+  .fc .fc-event { cursor: pointer; font-size: 12px; border: 0; border-radius: 4px; margin-top: 2px;
+                  background: color-mix(in srgb, var(--c) var(--mix), var(--panel)) !important;
+                  box-shadow: inset 3px 0 0 var(--c); }
+  .fc .fc-event .fc-event-main { color: var(--text); padding: 1px 6px 1px 8px; }
+  .fc .fc-event:hover { background: color-mix(in srgb, var(--c) calc(var(--mix) + 12%), var(--panel)) !important; }
+  .fc .fc-list-event-dot { border-color: var(--c) !important; }
+  .fc .fc-list-event:hover td { background: var(--soft); }
+  .fc .fc-list-day-cushion { background: var(--soft); }
+  .fc a { color: inherit; }
+  .fc .fc-daygrid-more-link { color: var(--muted); font-size: 12px; }
+  .fc .fc-popover { background: var(--panel); border-color: var(--line); }
+  .fc .fc-popover-header { background: var(--soft); color: var(--text); }
+
+  .g-official { --c: var(--g-official); } .g-tw { --c: var(--g-tw); } .g-theme { --c: var(--g-theme); }
+  .g-event { --c: var(--g-event); } .g-agent { --c: var(--g-agent); } .g-pp { --c: var(--g-pp); }
+  .views { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 0 24px 10px; }
+  .views .label { color: var(--muted); font-size: 12px; }
+  .filters[hidden] { display: none; }
+  @media (max-width: 900px) { .views { padding-left: 16px; padding-right: 16px; } }
+
+  @media (max-width: 900px) {
+    header, .filters { padding-left: 16px; padding-right: 16px; }
+    main { grid-template-columns: 1fr; padding: 0 16px 24px; }
+    #settings { right: 16px; left: 16px; width: auto; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Alpha 農民曆 <span style="font-size:13px;font-weight:500;color:var(--muted)">WQB 活動月曆</span></h1>
+  <span class="meta" id="meta"></span>
+  <span class="spacer"></span>
+  <div class="seg" id="tz" role="group" aria-label="時區" title="官方以美東時間為準">
+    <button data-z="tw">台灣時間</button><button data-z="et">美東時間</button>
+  </div>
+  <div class="seg" role="group" aria-label="主題">
+    <button data-t="dark">黑</button><button data-t="light">白</button><button data-t="blue">藍</button>
+  </div>
+  <button class="icon-btn" id="gear" title="自訂顏色" aria-label="自訂顏色">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+</header>
+<div class="views">
+  <span class="label">顯示</span>
+  <div class="seg" id="views" role="group" aria-label="檢視">
+    <button data-v="all">全部</button><button data-v="comp">比賽</button><button data-v="pp">Power Pool</button>
+    <button data-v="events">活動</button><button data-v="custom">自訂</button>
+  </div>
+  <span class="meta" id="view-hint" style="color:var(--muted);font-size:12px"></span>
+</div>
+<div class="filters" id="filters">
+  <div class="search">
+    <input id="q" type="search" placeholder="搜尋：Power Pool、GLB、USD…" aria-label="搜尋月曆">
+    <button class="quick" data-q="Power Pool">Power Pool</button>
+  </div>
+</div>
+<main>
+  <div class="card"><div id="calendar"></div></div>
+  <aside>
+    <div class="card alm"><h2 id="alm-date">今日宜忌</h2><div id="alm"></div></div>
+    <div class="card"><h2>今天進行中</h2><div id="now"></div></div>
+    <div class="card"><h2>Power Pool 現況</h2><div id="pp"></div></div>
+    <div class="card" id="detail"><p class="empty">點選月曆上的項目，查看名稱、目的、計分方式與獎項。</p></div>
+  </aside>
+</main>
+<div class="card" id="settings" role="dialog" aria-label="自訂顏色">
+  <h2>自訂顏色（目前主題）</h2>
+  <div id="color-rows"></div>
+  <div class="actions"><button class="btn" id="reset">重設</button><button class="btn" id="close">完成</button></div>
+</div>
+<script>
+const DATA = /*__CALENDAR_DATA__*/null;
+
+// 類型 → 6 個顏色群組（Power Pool Theme 從一般 Theme 拆出來）
+const GROUPS = {
+  official: { label: "官方比賽",        kinds: ["官方比賽"] },
+  tw:       { label: "台灣挑戰",        kinds: ["季賽", "雙週賽", "週賽", "台灣活動"] },
+  agent:    { label: "Agent 比賽",      kinds: ["Agent"] },
+  pp:       { label: "Power Pool",      kinds: [] },
+  theme:    { label: "Theme（乘數活動）", kinds: ["Theme"] },
+  event:    { label: "官方活動",        kinds: ["活動"] },
+};
+const groupOf = i => i.tags.includes("Power Pool") ? "pp"
+  : Object.keys(GROUPS).find(g => GROUPS[g].kinds.includes(i.kind)) || "official";
+
+// 檢視模式 → 要顯示的群組
+const VIEWS = {
+  all:    { groups: Object.keys(GROUPS), hint: "所有比賽、Theme 與活動" },
+  comp:   { groups: ["official", "tw", "agent"], hint: "官方比賽、台灣挑戰（季賽 / 雙週賽 / 週賽）、Agent 比賽" },
+  pp:     { groups: ["pp"], hint: "Power Pool Theme（右側有 PPA 通用資格與額度）" },
+  events: { groups: ["event", "theme"], hint: "官方活動（Webinar 等）與一般 Theme（非比賽的乘數活動）" },
+  custom: { groups: null, hint: "勾選要顯示的類別" },
+};
+
+// ---------- 偏好設定（只存在這個瀏覽器；讀寫失敗也不影響顯示） ----------
+const PREF_KEY = "wqb-calendar-prefs";
+let prefs = { theme: null, colors: {}, view: "comp", custom: null, tz: "tw" };   // colors: { dark: {official: "#..."} }
+try { prefs = { ...prefs, ...JSON.parse(localStorage.getItem(PREF_KEY) || "{}") }; } catch (e) {}
+const savePrefs = () => { try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch (e) {} };
+const root = document.documentElement;
+
+function applyTheme(t) {
+  root.dataset.theme = t;
+  for (const g of Object.keys(GROUPS)) root.style.removeProperty(`--g-${g}`);
+  for (const [g, c] of Object.entries((prefs.colors || {})[t] || {})) root.style.setProperty(`--g-${g}`, c);
+  document.querySelectorAll("button[data-t]").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === t));
+  renderColorRows();
+}
+const initialTheme = prefs.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+// ---------- 資料 ----------
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const linkify = s => esc(s).replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+const addDay = d => { const x = new Date(d + "T00:00:00"); x.setDate(x.getDate() + 1);
+  return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`; };
+// ---------- 時區：預設台灣時間，可切換美東時間（官方以美東時間為準） ----------
+const ZONES = { tw: { id: "Asia/Taipei", label: "台灣時間" }, et: { id: "America/New_York", label: "美東時間" } };
+if (!ZONES[prefs.tz]) prefs.tz = "tw";
+const dateIn = (iso, z) => new Intl.DateTimeFormat("en-CA", { timeZone: ZONES[z].id, year: "numeric",
+  month: "2-digit", day: "2-digit" }).format(new Date(iso));                     // → YYYY-MM-DD
+const whenIn = (iso, z) => new Intl.DateTimeFormat("zh-TW", { timeZone: ZONES[z].id, month: "numeric",
+  day: "numeric", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(iso));
+const other = z => (z === "tw" ? "et" : "tw");
+const nowMs = () => Date.now();
+const isActive = i => new Date(i.start_at) <= nowMs() && nowMs() <= new Date(i.end_at);
+const leftText = i => {
+  const h = (new Date(i.end_at) - nowMs()) / 36e5;
+  return h >= 48 ? `剩 ${Math.floor(h / 24)} 天` : h >= 1 ? `剩 ${Math.floor(h)} 小時` : "即將截止";
+};
+const items = (DATA && DATA.items) || [];
+for (const i of items) {   // 舊版資料沒有精確時刻 → 視為美東當天整天
+  i.start_at = i.start_at || `${i.start}T00:00:00-05:00`;
+  i.end_at = i.end_at || `${i.end}T23:59:59-05:00`;
+}
+if (!VIEWS[prefs.view]) prefs.view = "comp";
+const customSet = () => new Set(prefs.custom || Object.keys(GROUPS));
+let active = new Set(VIEWS[prefs.view].groups || customSet());
+
+function renderMeta() {
+  document.getElementById("meta").textContent = DATA
+    ? `${items.length} 項 · 更新於 ${whenIn(DATA.built_at, prefs.tz)} · 目前顯示${ZONES[prefs.tz].label}（官方以美東時間為準）`
+    : "尚無資料：請先執行 python -m wqbka.calendar";
+}
+
+let query = "";
+const matches = i => !query || [i.title, i.kind, i.tags.join(" "), i.purpose, i.scoring, i.prize]
+  .join(" ").toLowerCase().includes(query);
+const visible = () => items.filter(i => active.has(groupOf(i)) && matches(i));
+const toEvents = () => visible().map(i => ({   // 依目前時區換算起訖日期（台灣通常會比美東晚一天結束）
+  id: i.id, title: i.title, start: dateIn(i.start_at, prefs.tz), end: addDay(dateIn(i.end_at, prefs.tz)), allDay: true,
+  classNames: [`g-${groupOf(i)}`], extendedProps: i,
+}));
+
+// ---------- 篩選 ----------
+const filters = document.getElementById("filters");
+let cal = null;   // FullCalendar 實例（最後才建立）
+const chipEls = {};
+for (const [g, def] of Object.entries(GROUPS)) {
+  const n = items.filter(i => groupOf(i) === g).length;
+  if (!n) continue;
+  const b = document.createElement("button");
+  b.className = `filter g-${g}`;
+  b.innerHTML = `<span class="dot"></span>${esc(def.label)}<span class="n">${n}</span>`;
+  b.onclick = () => {   // 只有「自訂」模式會顯示這排；點了就存成自訂組合
+    active.has(g) ? active.delete(g) : active.add(g);
+    prefs.custom = [...active]; savePrefs(); syncChips(); refresh();
+  };
+  chipEls[g] = b;
+  filters.insertBefore(b, filters.querySelector(".search"));
+}
+function syncChips() { for (const [g, b] of Object.entries(chipEls)) b.setAttribute("aria-pressed", active.has(g)); }
+function setView(v) {
+  prefs.view = v; savePrefs();
+  active = new Set(VIEWS[v].groups || customSet());
+  document.querySelectorAll("#views button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === v));
+  Object.values(chipEls).forEach(b => b.hidden = v !== "custom");
+  document.getElementById("view-hint").textContent = VIEWS[v].hint;
+  syncChips();
+  if (cal) refresh();
+}
+document.querySelectorAll("#views button").forEach(b => b.onclick = () => setView(b.dataset.v));
+function refresh() { cal.removeAllEvents(); cal.addEventSource(toEvents()); renderNow(); }
+const qInput = document.getElementById("q");
+qInput.oninput = () => { query = qInput.value.trim().toLowerCase(); refresh(); };
+document.querySelectorAll(".quick").forEach(b => b.onclick = () => {
+  qInput.value = qInput.value === b.dataset.q ? "" : b.dataset.q; qInput.oninput();
+});
+
+// ---------- 今日宜忌（與 wqbka/calendar.py 的 almanac() 同一套規則） ----------
+const shortTitle = t => t.replace(/^Theme：|^\[公告\]\s*|\s*開跑[！!]?$/g, "")
+  .replace(/\s*-\s*\d{1,2}\/\d{1,2}\s*-\s*\d{1,2}\/\d{1,2}.*$/, "").trim();
+const firstReq = i => ((i.scoring || "").split("\n").map(x => x.replace(/^[\s-]+|[\s-]+$/g, ""))
+  .filter(x => x && !/^(乘數|條件|推薦)/.test(x))[0] || "");
+const multText = i => {
+  const xs = [...new Set((i.scoring || "").match(/\d+(?:\.\d+)?X/g) || [])].sort((a, b) => parseFloat(a) - parseFloat(b));
+  return xs.length ? (xs.length === 1 ? xs[0] : `${xs[0]}–${xs[xs.length - 1]}`) + " 乘數" : "乘數加成";
+};
+function almanac() {
+  const now = nowMs(), yi = [], ji = [];
+  const act = items.filter(isActive).sort((a, b) => new Date(a.end_at) - new Date(b.end_at));
+  for (const i of act) {
+    const left = new Date(i.end_at) - now, lt = leftText(i), name = shortTitle(i.title);
+    if (i.tags.includes("Power Pool")) yi.push({ t: `交 PPA：${name}`, d: `${firstReq(i)}；${lt}`, i });
+    else if (i.kind === "Theme") yi.push({ t: `吃 Theme：${name}`, d: `${multText(i)}；${lt}`, i });
+    else if (i.kind === "活動") yi.push({ t: `參加：${name}`, d: whenIn(i.start_at, prefs.tz), i });
+    else yi.push({ t: `衝刺：${name}`, d: lt, i });
+    if (left < 48 * 36e5 && i.kind !== "活動") ji.push({ t: `拖延：${name}`, d: `只${lt}`, i });
+  }
+  for (const i of [...items].sort((a, b) => new Date(a.start_at) - new Date(b.start_at))) {
+    const toStart = new Date(i.start_at) - now, sinceEnd = now - new Date(i.end_at);
+    if (i.kind === "活動" && toStart > 0 && toStart <= 3 * 864e5) yi.push({ t: `報名：${shortTitle(i.title)}`, d: whenIn(i.start_at, prefs.tz), i });
+    if (i.kind !== "活動" && sinceEnd > 0 && sinceEnd <= 3 * 864e5)
+      ji.push({ t: `再交：${shortTitle(i.title)}`, d: `已於 ${whenIn(i.end_at, prefs.tz)} 截止`, i });
+  }
+  if (!act.some(i => i.tags.includes("Power Pool")))
+    ji.push({ t: "交 pure PPA", d: "目前沒有進行中的 Power Pool Theme（首次提交 6 週後必須符合 Theme）" });
+  const tips = (DATA && DATA.almanac_tips) || [];
+  if (tips.length) {   // 依台灣日期輪替；與 Python 的 date.toordinal() 對齊（1970-01-01 = 719163）
+    const days = Math.floor(Date.parse(dateIn(new Date(now).toISOString(), "tw") + "T00:00:00Z") / 864e5) + 719163;
+    const [k, tip] = tips[days % tips.length];
+    (k === "宜" ? yi : ji).push({ t: tip, d: "每日提醒" });
+  }
+  return { yi, ji };
+}
+function renderAlmanac() {
+  const { yi, ji } = almanac();
+  document.getElementById("alm-date").textContent =
+    `今日宜忌 · ${new Intl.DateTimeFormat("zh-TW", { timeZone: ZONES[prefs.tz].id, month: "numeric", day: "numeric", weekday: "short" }).format(new Date())}`;
+  const row = (kind, x) => `<div class="alm-row${x.i ? " click" : ""}" ${x.i ? `data-id="${esc(x.i.id)}"` : ""}>
+      <span class="alm-badge ${kind === "宜" ? "yi" : "ji"}">${kind}</span>
+      <div><div class="alm-t">${esc(x.t)}</div>${x.d ? `<div class="alm-d">${esc(x.d)}</div>` : ""}</div></div>`;
+  const el = document.getElementById("alm");
+  el.innerHTML = yi.map(x => row("宜", x)).join("") + ji.map(x => row("忌", x)).join("")
+    || '<p class="empty">今日諸事皆宜</p>';
+  el.querySelectorAll(".alm-row.click").forEach(d => d.onclick = () => showDetail(items.find(i => i.id === d.dataset.id)));
+}
+
+// ---------- Power Pool 現況：進行中的 PP Theme + PPA 通用規則 ----------
+function renderPowerPool() {
+  const el = document.getElementById("pp");
+  const isPP = i => i.tags.includes("Power Pool");
+  const cur = items.filter(i => isPP(i) && isActive(i));
+  const next = items.filter(i => isPP(i) && new Date(i.start_at) > nowMs())
+                    .sort((a, b) => new Date(a.start_at) - new Date(b.start_at));
+  const reqLines = s => (s.split("條件：")[1] || "").split("推薦資料集：")[0]
+    .split("\n").map(x => x.replace(/^[-*]\s*/, "").trim()).filter(Boolean);
+  let html = "";
+  for (const i of [...cur, ...next.slice(0, 2)]) {
+    const when = new Date(i.start_at) > nowMs() ? `即將開始 ${whenIn(i.start_at, prefs.tz)}`
+      : `進行中 · 截止 ${whenIn(i.end_at, prefs.tz)}（${leftText(i)}）`;
+    html += `<div class="pp-item" data-id="${esc(i.id)}"><div class="t">${esc(i.title.replace("Theme：", ""))}</div>
+             <div class="d">${esc(when)}</div><ul>${reqLines(i.scoring).map(r => `<li>${esc(r)}</li>`).join("")}</ul></div>`;
+  }
+  if (!html) html = '<p class="empty">目前沒有進行中的 Power Pool Theme（6 週後的 pure PPA 需符合進行中的 Theme 才能提交）</p>';
+  const R = DATA && DATA.ppa_rules;
+  if (R) {
+    const rows = (R.quota_table || []).filter(r => !/^\|\s*-/.test(r))
+      .map(r => r.split("|").slice(1, -1).map(c => c.trim()));
+    const table = rows.length ? `<table><tr>${rows[0].map(c => `<th>${esc(c)}</th>`).join("")}</tr>${
+      rows.slice(1).map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</table>` : "";
+    html += `<details><summary>PPA 通用資格與額度</summary>
+      <ul>${R.criteria.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+      ${R.note ? `<div class="muted">${esc(R.note)}</div>` : ""}
+      <div style="margin-top:8px;font-weight:600">Pure PPA 提交額度</div>${table}
+      <ul>${(R.quota_notes || []).map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+      <div class="muted">來源：<a href="${esc(R.url)}" target="_blank" rel="noopener">${esc(R.title)}</a>（更新 ${esc(R.updated_at)}）</div>
+    </details>`;
+  }
+  el.innerHTML = html;
+  el.querySelectorAll(".pp-item").forEach(d => d.onclick = () => showDetail(items.find(i => i.id === d.dataset.id)));
+}
+
+// ---------- 詳情與「今天進行中」 ----------
+function showDetail(i) {
+  lastShown = i;
+  const sec = (label, v) => v ? `<dt>${label}</dt><dd>${linkify(v)}</dd>` : "";
+  document.getElementById("detail").innerHTML = `
+    <h3>${esc(i.title)}</h3>
+    <div class="dates"><b>${ZONES[prefs.tz].label}</b>　${esc(whenIn(i.start_at, prefs.tz))} → ${esc(whenIn(i.end_at, prefs.tz))}<br>
+      ${ZONES[other(prefs.tz)].label}　${esc(whenIn(i.start_at, other(prefs.tz)))} → ${esc(whenIn(i.end_at, other(prefs.tz)))}
+      ${i.time_basis === "et_date" ? '<br><span style="font-size:12px">公告只寫日期，以美東當天 00:00–23:59 計</span>' : ""}</div>
+    <div class="tags">${i.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+    <dl>${sec("目的", i.purpose)}${sec("計分方式", i.scoring)}${sec("獎項", i.prize)}</dl>
+    <div class="src">來源：${esc(i.source)} · <a href="${esc(i.url)}" target="_blank" rel="noopener">原文</a></div>`;
+}
+function renderNow() {
+  const list = visible().filter(isActive).sort((a, b) => new Date(a.end_at) - new Date(b.end_at));
+  const el = document.getElementById("now");
+  el.innerHTML = list.length ? "" : '<p class="empty">目前沒有進行中的項目</p>';
+  for (const i of list) {
+    const d = document.createElement("div");
+    d.className = `now-item g-${groupOf(i)}`;
+    d.innerHTML = `<span class="bar"></span><div><div class="t">${esc(i.title)}</div>
+                   <div class="d">${esc(i.kind)} · 截止 ${esc(whenIn(i.end_at, prefs.tz))}（${leftText(i)}）</div></div>`;
+    d.onclick = () => showDetail(i);
+    el.appendChild(d);
+  }
+}
+
+// ---------- 自訂顏色 ----------
+const toHex = c => { const x = document.createElement("canvas").getContext("2d"); x.fillStyle = c; return x.fillStyle; };
+function renderColorRows() {
+  const rows = document.getElementById("color-rows");
+  rows.innerHTML = "";
+  for (const [g, def] of Object.entries(GROUPS)) {
+    const cur = toHex(getComputedStyle(root).getPropertyValue(`--g-${g}`).trim());
+    const row = document.createElement("label");
+    row.className = "row";
+    row.innerHTML = `<span>${esc(def.label)}</span><input type="color" value="${cur}">`;
+    row.querySelector("input").oninput = e => {
+      const t = root.dataset.theme;
+      prefs.colors = prefs.colors || {}; prefs.colors[t] = { ...(prefs.colors[t] || {}), [g]: e.target.value };
+      root.style.setProperty(`--g-${g}`, e.target.value); savePrefs();
+    };
+    rows.appendChild(row);
+  }
+}
+const panel = document.getElementById("settings");
+document.getElementById("gear").onclick = () => panel.classList.toggle("open");
+document.getElementById("close").onclick = () => panel.classList.remove("open");
+document.getElementById("reset").onclick = () => {
+  if (prefs.colors) delete prefs.colors[root.dataset.theme];
+  savePrefs(); applyTheme(root.dataset.theme);
+};
+document.querySelectorAll("button[data-t]").forEach(b => b.onclick = () => {
+  prefs.theme = b.dataset.t; savePrefs(); applyTheme(b.dataset.t);
+});
+let lastShown = null;
+function setTz(z) {
+  prefs.tz = z; savePrefs();
+  document.querySelectorAll("button[data-z]").forEach(b => b.setAttribute("aria-pressed", b.dataset.z === z));
+  renderMeta();
+  if (cal) { refresh(); renderPowerPool(); renderAlmanac(); if (lastShown) showDetail(lastShown); }
+}
+document.querySelectorAll("button[data-z]").forEach(b => b.onclick = () => setTz(b.dataset.z));
+
+// ---------- 網址參數（agent 的 open_calendar 會帶）：#view=pp&q=GLB&date=2026-11-01 ----------
+const H = new URLSearchParams(location.hash.slice(1));
+if (H.get("theme") && ["dark", "light", "blue"].includes(H.get("theme"))) prefs.theme = H.get("theme");
+if (H.get("q")) { qInput.value = H.get("q"); query = H.get("q").trim().toLowerCase(); }
+if (ZONES[H.get("tz")]) prefs.tz = H.get("tz");
+
+// ---------- 月曆 ----------
+applyTheme(prefs.theme || initialTheme);
+setTz(prefs.tz);
+setView(VIEWS[H.get("view")] ? H.get("view") : prefs.view);
+cal = new FullCalendar.Calendar(document.getElementById("calendar"), {
+  locale: "zh-tw", initialView: "dayGridMonth", height: "auto", dayMaxEvents: 4, eventDisplay: "block",
+  initialDate: /^\d{4}-\d{2}(-\d{2})?$/.test(H.get("date") || "") ? H.get("date") : undefined,
+  headerToolbar: { left: "prev,next today", center: "title", right: "dayGridMonth,listMonth" },
+  events: toEvents(),
+  eventClick: info => showDetail(info.event.extendedProps),
+});
+cal.render();
+renderNow();
+renderPowerPool();
+renderAlmanac();
+if (H.get("open")) { const it = items.find(i => i.id === H.get("open")); if (it) showDetail(it); }
+</script>
+</body>
+</html>

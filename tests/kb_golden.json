@@ -1,0 +1,561 @@
+{
+ "_說明": "知識庫檢索評測題庫。expect 為正解文件的標題（title）或段落標題（heading）正規式，命中任一即算對。pair 相同者為中英同義題。",
+ "search": [
+  {
+   "id": "pyramid-zh",
+   "pair": "pyramid",
+   "cat": "名詞",
+   "q": "pyramid 是什麼？",
+   "expect": {
+    "title": "What are pyramids",
+    "heading": "Pyramid"
+   }
+  },
+  {
+   "id": "pyramid-en",
+   "pair": "pyramid",
+   "cat": "名詞",
+   "q": "What is a pyramid in BRAIN?",
+   "expect": {
+    "title": "What are pyramids",
+    "heading": "Pyramid"
+   }
+  },
+  {
+   "id": "pm-zh",
+   "pair": "pm",
+   "cat": "規則",
+   "q": "金字塔乘數怎麼計算",
+   "expect": {
+    "title": "Dynamic Pyramid Multiplier"
+   }
+  },
+  {
+   "id": "pm-en",
+   "pair": "pm",
+   "cat": "規則",
+   "q": "How is the dynamic pyramid multiplier computed?",
+   "expect": {
+    "title": "Dynamic Pyramid Multiplier"
+   }
+  },
+  {
+   "id": "ppa-zh",
+   "pair": "ppa",
+   "cat": "規則",
+   "q": "PPA 的提交條件是什麼",
+   "expect": {
+    "title": "^Power Pool Alphas$|Getting Started.*Power Pool"
+   }
+  },
+  {
+   "id": "ppa-en",
+   "pair": "ppa",
+   "cat": "規則",
+   "q": "Power Pool Alpha eligibility criteria",
+   "expect": {
+    "title": "^Power Pool Alphas$|Getting Started.*Power Pool"
+   }
+  },
+  {
+   "id": "selfcorr-zh",
+   "pair": "selfcorr",
+   "cat": "規則",
+   "q": "自相關的門檻是多少",
+   "expect": {
+    "title": "Clear these tests before submitting|Consultant Submission Tests|Self-correlat"
+   }
+  },
+  {
+   "id": "selfcorr-en",
+   "pair": "selfcorr",
+   "cat": "規則",
+   "q": "self-correlation threshold for submission",
+   "expect": {
+    "title": "Clear these tests before submitting|Consultant Submission Tests|Self-correlat"
+   }
+  },
+  {
+   "id": "turnover-zh",
+   "pair": "turnover",
+   "cat": "研究",
+   "q": "換手率太高怎麼辦",
+   "expect": {
+    "title": "How to improve Turnover"
+   }
+  },
+  {
+   "id": "turnover-en",
+   "pair": "turnover",
+   "cat": "研究",
+   "q": "how to reduce turnover of my alpha",
+   "expect": {
+    "title": "How to improve Turnover"
+   }
+  },
+  {
+   "id": "neut-zh",
+   "pair": "neut",
+   "cat": "名詞",
+   "q": "中性化是什麼",
+   "expect": {
+    "title": "neutralization in lay-man|^Neutralization"
+   }
+  },
+  {
+   "id": "neut-en",
+   "pair": "neut",
+   "cat": "名詞",
+   "q": "what is neutralization",
+   "expect": {
+    "title": "neutralization in lay-man|^Neutralization"
+   }
+  },
+  {
+   "id": "consultant-zh",
+   "pair": "consultant",
+   "cat": "顧問",
+   "q": "如何成為顧問",
+   "expect": {
+    "title": "Conditional Consultant Status|Sign the Consulting Agreement|Can I become a BRAIN consultant|Consultant onboarding process"
+   }
+  },
+  {
+   "id": "consultant-en",
+   "pair": "consultant",
+   "cat": "顧問",
+   "q": "how to become a consultant in Taiwan",
+   "expect": {
+    "title": "Conditional Consultant Status|Sign the Consulting Agreement|Can I become a BRAIN consultant|Consultant onboarding process"
+   }
+  },
+  {
+   "id": "qpay-zh",
+   "pair": "qpay",
+   "cat": "顧問",
+   "q": "季度報酬怎麼算",
+   "expect": {
+    "title": "What is the Quarterly Payment"
+   }
+  },
+  {
+   "id": "qpay-en",
+   "pair": "qpay",
+   "cat": "顧問",
+   "q": "how is the quarterly payment calculated",
+   "expect": {
+    "title": "What is the Quarterly Payment"
+   }
+  },
+  {
+   "id": "sa-zh",
+   "pair": "sa",
+   "cat": "名詞",
+   "q": "SuperAlpha 是什麼",
+   "expect": {
+    "title": "What is a SuperAlpha",
+    "heading": "SuperAlpha"
+   }
+  },
+  {
+   "id": "sa-en",
+   "pair": "sa",
+   "cat": "名詞",
+   "q": "what is a SuperAlpha",
+   "expect": {
+    "title": "What is a SuperAlpha",
+    "heading": "SuperAlpha"
+   }
+  },
+  {
+   "id": "decay-zh",
+   "pair": "decay",
+   "cat": "名詞",
+   "q": "decay 是什麼意思",
+   "expect": {
+    "title": "explain what decay is|Decay and Delay",
+    "heading": "^.*> Decay$"
+   }
+  },
+  {
+   "id": "decay-en",
+   "pair": "decay",
+   "cat": "名詞",
+   "q": "explain decay setting",
+   "expect": {
+    "title": "explain what decay is|Decay and Delay",
+    "heading": "^.*> Decay$"
+   }
+  },
+  {
+   "id": "ladder-zh",
+   "pair": "ladder",
+   "cat": "規則",
+   "q": "IS ladder 沒過怎麼辦",
+   "expect": {
+    "title": "IS[ -]?ladder"
+   }
+  },
+  {
+   "id": "ladder-en",
+   "pair": "ladder",
+   "cat": "規則",
+   "q": "how to pass the IS ladder sharpe test",
+   "expect": {
+    "title": "IS[ -]?ladder"
+   }
+  },
+  {
+   "id": "fitness-zh",
+   "pair": "fitness",
+   "cat": "名詞",
+   "q": "Fitness 怎麼計算",
+   "expect": {
+    "title": "How is Fitness calculated"
+   }
+  },
+  {
+   "id": "fitness-en",
+   "pair": "fitness",
+   "cat": "名詞",
+   "q": "how is fitness calculated",
+   "expect": {
+    "title": "How is Fitness calculated"
+   }
+  },
+  {
+   "id": "spc-zh",
+   "pair": "spc",
+   "cat": "比賽",
+   "q": "SPC 的 segment coverage 要求",
+   "expect": {
+    "title": "segment coverage"
+   }
+  },
+  {
+   "id": "spc-en",
+   "pair": "spc",
+   "cat": "比賽",
+   "q": "SPC segment coverage requirement",
+   "expect": {
+    "title": "segment coverage"
+   }
+  },
+  {
+   "id": "genius-zh",
+   "pair": "genius",
+   "cat": "顧問",
+   "q": "Genius 計畫是什麼",
+   "expect": {
+    "title": "Genius program|Brain Genius"
+   }
+  },
+  {
+   "id": "genius-en",
+   "pair": "genius",
+   "cat": "顧問",
+   "q": "what is the BRAIN Genius program",
+   "expect": {
+    "title": "Genius program|Brain Genius"
+   }
+  },
+  {
+   "id": "vf-zh",
+   "pair": "vf",
+   "cat": "顧問",
+   "q": "Value Factor 是什麼",
+   "expect": {
+    "title": "What is the Value Factor"
+   }
+  },
+  {
+   "id": "vf-en",
+   "pair": "vf",
+   "cat": "顧問",
+   "q": "what is the value factor",
+   "expect": {
+    "title": "What is the Value Factor"
+   }
+  },
+  {
+   "id": "arc-zh",
+   "pair": "arc",
+   "cat": "比賽",
+   "q": "ARC 可以組隊嗎",
+   "expect": {
+    "title": "teams allowed in ARC"
+   }
+  },
+  {
+   "id": "arc-en",
+   "pair": "arc",
+   "cat": "比賽",
+   "q": "are teams allowed in ARC",
+   "expect": {
+    "title": "teams allowed in ARC"
+   }
+  },
+  {
+   "id": "dcc-zh",
+   "pair": "dcc",
+   "cat": "比賽",
+   "q": "DCC 是什麼比賽",
+   "expect": {
+    "title": "Data Creation Challenge"
+   }
+  },
+  {
+   "id": "dcc-en",
+   "pair": "dcc",
+   "cat": "比賽",
+   "q": "what is the data creation challenge",
+   "expect": {
+    "title": "Data Creation Challenge"
+   }
+  },
+  {
+   "id": "raa-zh",
+   "pair": "raa",
+   "cat": "名詞",
+   "q": "Region Agnostic Alpha 是什麼",
+   "expect": {
+    "title": "Region Agnostic Alpha"
+   }
+  },
+  {
+   "id": "raa-en",
+   "pair": "raa",
+   "cat": "名詞",
+   "q": "what is a region agnostic alpha",
+   "expect": {
+    "title": "Region Agnostic Alpha"
+   }
+  },
+  {
+   "id": "gn-zh",
+   "pair": "gn",
+   "cat": "運算子",
+   "q": "group_neutralize 跟 neutralization 設定差在哪",
+   "expect": {
+    "title": "Difference between group_neutralize|Operator: group_neutralize"
+   }
+  },
+  {
+   "id": "gn-en",
+   "pair": "gn",
+   "cat": "運算子",
+   "q": "difference between group_neutralize and the neutralization setting",
+   "expect": {
+    "title": "Difference between group_neutralize|Operator: group_neutralize"
+   }
+  },
+  {
+   "id": "tsrank-zh",
+   "pair": "tsrank",
+   "cat": "運算子",
+   "q": "ts_rank 怎麼用",
+   "expect": {
+    "title": "Operator: ts_rank"
+   }
+  },
+  {
+   "id": "tsrank-en",
+   "pair": "tsrank",
+   "cat": "運算子",
+   "q": "how does the ts_rank operator work",
+   "expect": {
+    "title": "Operator: ts_rank"
+   }
+  },
+  {
+   "id": "trunc-zh",
+   "pair": "trunc",
+   "cat": "名詞",
+   "q": "Truncation 設定是做什麼的",
+   "expect": {
+    "title": "Truncation",
+    "heading": "Truncation"
+   }
+  },
+  {
+   "id": "trunc-en",
+   "pair": "trunc",
+   "cat": "名詞",
+   "q": "what does the truncation setting do",
+   "expect": {
+    "title": "Truncation",
+    "heading": "Truncation"
+   }
+  },
+  {
+   "id": "maxtrade-zh",
+   "pair": "maxtrade",
+   "cat": "規則",
+   "q": "Max Trade 設定是什麼",
+   "expect": {
+    "title": "Max Trade"
+   }
+  },
+  {
+   "id": "maxtrade-en",
+   "pair": "maxtrade",
+   "cat": "規則",
+   "q": "what is the max trade setting",
+   "expect": {
+    "title": "Max Trade"
+   }
+  },
+  {
+   "id": "tw-biweekly",
+   "cat": "台灣挑戰",
+   "q": "Bi-Weekly #2 怎麼計分",
+   "expect": {
+    "title": "Bi-Weekly Alpha Challenge #2"
+   }
+  },
+  {
+   "id": "tw-q4",
+   "cat": "台灣挑戰",
+   "q": "2026 Q4 台灣挑戰賽規則",
+   "expect": {
+    "title": "2026 Q4 台灣挑戰賽"
+   }
+  },
+  {
+   "id": "tw-agent",
+   "cat": "台灣挑戰",
+   "q": "Agent 比賽的投稿格式",
+   "expect": {
+    "title": "Agent Creation Mini Challenge"
+   }
+  },
+  {
+   "id": "theme-top1000",
+   "cat": "Theme",
+   "q": "USA TOP1000 Theme 的乘數",
+   "expect": {
+    "title": "TOP1000 Theme"
+   }
+  },
+  {
+   "id": "osmosis",
+   "cat": "比賽",
+   "q": "Osmosis 比賽什麼時候",
+   "expect": {
+    "title": "Osmosis"
+   }
+  },
+  {
+   "id": "dataset-analyst",
+   "cat": "資料集",
+   "q": "analyst 類的資料集有哪些",
+   "expect": {
+    "title": "^Dataset: .*\\(analyst"
+   }
+  },
+  {
+   "id": "python-vs-fe",
+   "cat": "名詞",
+   "q": "Python Alpha 比 Fast Expression 好在哪",
+   "expect": {
+    "title": "advantages of Python Alphas over Fast"
+   }
+  },
+  {
+   "id": "universe",
+   "cat": "名詞",
+   "q": "TOP3000 跟 TOP2000 universe 差在哪",
+   "expect": {
+    "title": "What do the Universes mean"
+   }
+  }
+ ],
+ "glossary": [
+  {
+   "q": "pyramid",
+   "expect": "Pyramid"
+  },
+  {
+   "q": "super alpha",
+   "expect": "SuperAlpha"
+  },
+  {
+   "q": "ATOM",
+   "expect": "ATOM"
+  },
+  {
+   "q": "turnover",
+   "expect": "Turnover"
+  },
+  {
+   "q": "self correlation",
+   "expect": "Self correlation"
+  },
+  {
+   "q": "ts_rank",
+   "expect": "Operator: ts_rank"
+  },
+  {
+   "q": "PPA",
+   "expect": "Power Pool Alphas"
+  },
+  {
+   "q": "金字塔",
+   "expect": "Pyramid"
+  },
+  {
+   "q": "換手率",
+   "expect": "Turnover"
+  },
+  {
+   "q": "樣本外",
+   "expect": "Out-of-sample"
+  }
+ ],
+ "structured": [
+  {
+   "id": "pm-usa-d1-analyst",
+   "tool": "get_pyramid_multipliers",
+   "args": {
+    "region": "USA",
+    "delay": 1,
+    "category": "Analyst"
+   },
+   "check": "multiplier == '1.2'"
+  },
+  {
+   "id": "cal-q4-active",
+   "tool": "get_calendar",
+   "args": {
+    "on": "2026-11-12"
+   },
+   "check": "any('2026 Q4 台灣挑戰賽' in i['title'] for i in items)"
+  },
+  {
+   "id": "cal-pp-active",
+   "tool": "get_calendar",
+   "args": {
+    "on": "2026-11-12",
+    "tag": "Power Pool"
+   },
+   "check": "any('GLB/D1 Power Pool Nov' in i['title'] for i in items) and ppa_rules"
+  },
+  {
+   "id": "cal-agent-deadline",
+   "tool": "get_calendar",
+   "args": {
+    "tag": "Agent"
+   },
+   "check": "any(i['end'] == '2026-12-17' for i in items)"
+  }
+ ],
+ "off_topic": [
+  "如何烤戚風蛋糕",
+  "台北明天會下雨嗎",
+  "iPhone 18 規格",
+  "WQB 總部的停車場在哪",
+  "推薦好吃的拉麵",
+  "量子電腦是什麼",
+  "how to fix a flat bicycle tire"
+ ]
+}
